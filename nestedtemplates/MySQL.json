@@ -1,0 +1,154 @@
+﻿{  
+   "$schema":"http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+   "contentVersion":"1.0.0.0",
+  "parameters": {
+
+    "administratorLogin": {
+      "type": "string",
+      "minLength": 1,
+      "metadata": {
+        "description": "Database administrator login name"
+      }
+    },
+    "administratorLoginPassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "maxLength": 128,
+      "metadata": {
+        "description": "Database administrator password"
+      }
+    },
+   
+    "databaseDTU": {
+      "type": "int",
+      "allowedValues": [
+        50,
+        100
+      ],
+      "defaultValue": 100,
+      "metadata": {
+        "description": "Azure database for MySQL pricing tier"
+      }
+    },
+    "databaseSkuName": {
+      "type": "string",
+      "allowedValues": [
+        "MYSQLB100",
+        "MYSQLB50",
+        "MYSQLS100"
+      ],
+      "defaultValue": "MYSQLS100",
+      "metadata": {
+        "description": "Azure database for MySQL sku name: MySQL Basic 50 DTU (MYSQLB50)or 100 DTU (MYSQLB100)"
+      }
+    },
+    "databaseSkuSizeMB": {
+      "type": "int",
+      "allowedValues": [
+        102400,
+        51200
+      ],
+      "defaultValue": 51200,
+      "metadata": {
+        "description": "Azure database for MySQL Sku Size "
+      }
+    },
+    "databaseSkuTier": {
+      "type": "string",
+      "allowedValues": [
+        "Basic",
+        "Standard"
+      ],
+      "defaultValue": "Standard",
+      "metadata": {
+        "description": "Azure database for MySQL pricing tier"
+      }
+    },
+    "mysqlVersion": {
+      "type": "string",
+      "allowedValues": [
+        "5.6",
+        "5.7"
+      ],
+      "defaultValue": "5.6",
+      "metadata": {
+        "description": "MySQL version"
+      }
+    },
+    "firewallIP": {
+      "type": "string",
+      "metadata": {
+        "description": "IP to allow to connect"
+      }
+    },
+    "serverName": {
+      "type": "string",
+      "metadata": {
+        "description": "Unique server name"
+      }
+
+
+    }
+  },
+   "variables":{  
+      
+      
+   },
+  "resources": [
+    {
+      "apiVersion": "2016-02-01-privatepreview",
+      "kind": "",
+      "location": "[resourceGroup().location]",
+      "name": "[parameters('serverName')]",
+      "properties": {
+        "version": "[parameters('mysqlVersion')]",
+        "administratorLogin": "[parameters('administratorLogin')]",
+        "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
+       "sslEnforcement":"Disabled"
+      },
+      "sku": {
+        "name": "[parameters('databaseSkuName')]",
+        "tier": "[parameters('databaseSkuTier')]",
+        "capacity": "[parameters('databaseDTU')]",
+        "size": "[parameters('databaseSkuSizeMB')]",
+        "family": "SkuFamily"
+
+      },
+      "type": "Microsoft.DBforMySQL/servers",
+      "resources": [
+        {
+          "type": "firewallrules",
+          "apiVersion": "2016-02-01-privatepreview",
+          "dependsOn": [
+            "[concat('Microsoft.DBforMySQL/servers/', parameters('serverName'))]"
+          ],
+          "location": "[resourceGroup().location]",
+          "name": "[concat(parameters('serverName'),'firewall')]",
+          "properties": {
+            "startIpAddress": "[parameters('firewallIP')]",
+            "endIpAddress": "[parameters('firewallIP')]"
+          }
+        },
+        {
+          "name": "cattle",
+          "type": "databases",
+          "apiVersion": "2016-02-01-privatepreview",
+          "properties": {
+            "charset": "utf8",
+            "collation": "utf8_general_ci"
+          },
+          "dependsOn": [
+            "[concat('Microsoft.DBforMySQL/servers/', parameters('serverName'))]"
+          ]
+        }
+      ]
+    }
+  ],
+  "outputs": {
+    "mySqlFQDN": {
+      "value": "[reference(resourceId('Microsoft.DBforMySQL/servers',parameters('serverName'))).fullyQualifiedDomainName]",
+      "type": "string"
+    }
+
+  }
+}

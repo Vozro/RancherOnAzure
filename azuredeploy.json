@@ -1,0 +1,192 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "serverVMSize": {
+      "type": "string",
+      "defaultValue": "Standard_DS2_v2",
+      "minLength": 1
+    },
+
+    "serverDnsPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "DNS name used for public IP addresses and as base for naming other resources. Must be globally unique and 3 to 61 characters long."
+      },
+      "minLength": 3,
+      "maxLength": 61
+    },
+    "serverInstanceCount": {
+      "type": "int",
+      "metadata": {
+        "description": "Number of VM instances (100 or less)"
+      },
+      "minValue": 1,
+      "maxValue": 100
+    },
+    "hostVMSize": {
+      "type": "string",
+      "defaultValue": "Standard_DS2_v2",
+      "minLength": 1
+    },
+
+    "hostDnsPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "DNS name used for public IP addresses and as base for naming other resources. Must be globally unique and 3 to 61 characters long."
+      },
+      "minLength": 3,
+      "maxLength": 61
+    },
+    "hostInstanceCount": {
+      "type": "int",
+      "metadata": {
+        "description": "Number of VM instances (100 or less)"
+      },
+      "minValue": 1,
+      "maxValue": 100
+    },
+    "vmAdminUsername": {
+      "type": "string",
+      "minLength": 1,
+      "metadata": {
+        "description": "Administrator username on all VMs"
+      }
+    },
+    "vmAdminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Administrator password on all VMs"
+      }
+    },
+    "_artifactsLocation": {
+      "type": "string",
+      "defaultValue": "https://github.com/marrobi/RancherOnAzure/raw/master/"
+    },
+    "_artifactsLocationSasToken": {
+      "type": "securestring",
+      "defaultValue": "?"
+    }
+  },
+  "variables": {
+    "TemplateFolder": "nestedtemplates",
+    "registryName": "[concat(parameters('serverDnsPrefix'))]"
+  },
+  "resources": [
+    {
+      "name": "RancherServer",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-09-01",
+      "dependsOn": [
+
+        "[resourceId('Microsoft.Resources/deployments', 'ACR')]"
+
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('_artifactsLocation'), '/', variables('TemplateFolder'), '/RancherServer.json', parameters('_artifactsLocationSasToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "instanceCount": {
+            "value": "[parameters('serverInstanceCount')]"
+          },
+          "adminUsername": {
+            "value": "[parameters('vmAdminUsername')]"
+          },
+          "vmSize": {
+            "value": "[parameters('serverVMSize')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('vmAdminPassword')]"
+          },
+          "dnsPrefix": {
+            "value": "[parameters('serverDnsPrefix')]"
+
+          },
+          "registryName": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments','ACR')).outputs.registryName.value]"
+          },
+          "registryPassword": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments','ACR')).outputs.registryPassword.value]"
+
+          },
+          "_artifactsLocation": {
+            "value": "[parameters('_artifactsLocation')]"
+          },
+          "_artifactsLocationSasToken": {
+            "value": "[parameters('_artifactsLocationSasToken')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "RancherHosts",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-09-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', 'RancherServer')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('_artifactsLocation'), '/', variables('TemplateFolder'), '/RancherHosts.json', parameters('_artifactsLocationSasToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "instanceCount": {
+            "value": "[parameters('hostInstanceCount')]"
+          },
+          "adminUsername": {
+            "value": "[parameters('vmAdminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('vmAdminPassword')]"
+          },
+          "vmSize": {
+            "value": "[parameters('hostVMSize')]"
+          },
+          
+          "dnsPrefix": {
+            "value": "[parameters('hostDnsPrefix')]"
+
+          },
+          "RancherServerURL": {
+            "value": "[concat('http://',reference(resourceId('Microsoft.Resources/deployments','RancherServer')).outputs.rancherServerFQDN.value,':8080')]"
+          },
+            "_artifactsLocation": {
+            "value": "[parameters('_artifactsLocation')]"
+          },
+          "_artifactsLocationSasToken": {
+            "value": "[parameters('_artifactsLocationSasToken')]"
+          }
+        }      }
+      },
+    {
+      "name": "ACR",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-09-01",
+      "dependsOn": [],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('_artifactsLocation'), '/', variables('TemplateFolder'), '/ACR.json', parameters('_artifactsLocationSasToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "acrName": {
+            "value": "[variables('registryName')]"
+
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "RancherServerURL": {
+      "value": "[concat('http://',reference(resourceId('Microsoft.Resources/deployments','RancherServer')).outputs.rancherServerFQDN.value,':8080')]",
+      "type": "string"
+    }
+  }
+}
