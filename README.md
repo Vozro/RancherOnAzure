@@ -1,4 +1,4 @@
-﻿# Rancher On Azure
+a﻿# Rancher On Azure
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmarrobi%2FRancherOnAzure%2Fmaster%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
@@ -28,7 +28,7 @@ Connect to the Rancher deployment using the Rancher URL output, this will be in 
 #### Usage
 Scale up of server and hosts has been tested. Scale down will remove hosts but they will remain under management as disconnected.
 
-Traffic is configured to pass through to the Rancher Hosts on ports 80,443,8080. To expose a service configure a Rancher load balncer to listed on one of these ports. 
+Traffic is configured to pass through to the Rancher Hosts on ports 80,443,8080. To expose a service configure a Rancher load balancer to listed on one of these ports. 
 
 ## Pending work
 1.  Add Application Gateway to facilitate SSL offload to the Rancher server
