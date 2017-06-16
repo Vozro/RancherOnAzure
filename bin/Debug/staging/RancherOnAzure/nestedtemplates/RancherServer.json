@@ -50,23 +50,19 @@
         "description": "ACR Password"
       }
     },
-    "_artifactsLocation": {
+      "_artifactsLocation": {
       "type": "string",
-      "metadata": {
-        "description": "Auto-generated container in staging storage account to receive post-build staging folder upload"
-      }
+      "defaultValue": "https://github.com/marrobi/RancherOnAzure/raw/master/"
     },
     "_artifactsLocationSasToken": {
       "type": "securestring",
-      "metadata": {
-        "description": "Auto-generated token to access _artifactsLocation"
-      }
+      "defaultValue": "?"
     }
 
   },
   "variables": {
- 
-      "singleQuote": "'",
+
+    "singleQuote": "'",
     "addressPrefix": "192.168.100.0/24",
     "subnetPrefix": "192.168.100.0/25",
     "virtualNetworkName": "vnetRancherServer",
@@ -234,6 +230,7 @@
       },
 
       "properties": {
+        "overprovision": false,
         "upgradePolicy": {
           "mode": "Automatic"
         },
@@ -284,11 +281,11 @@
           },
           "extensionProfile": {
             "extensions": [
-           
+
               {
                 "name": "Script",
                 "properties": {
-                 "publisher": "Microsoft.Azure.Extensions",
+                  "publisher": "Microsoft.Azure.Extensions",
                   "type": "CustomScript",
                   "typeHandlerVersion": "2.0",
                   "autoUpgradeMinorVersion": true,

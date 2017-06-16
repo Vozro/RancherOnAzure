@@ -60,10 +60,12 @@
       }
     },
     "_artifactsLocation": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": "https://github.com/marrobi/RancherOnAzure/raw/master/"
     },
     "_artifactsLocationSasToken": {
-      "type": "securestring"
+      "type": "securestring",
+      "defaultValue": "?"
     }
   },
   "variables": {

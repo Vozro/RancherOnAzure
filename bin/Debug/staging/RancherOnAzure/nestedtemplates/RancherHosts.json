@@ -43,18 +43,14 @@
         "description": "URL of Rancher Server including http(s):// and port"
       }
     },
- 
+
     "_artifactsLocation": {
       "type": "string",
-      "metadata": {
-        "description": "Auto-generated container in staging storage account to receive post-build staging folder upload"
-      }
+      "defaultValue": "https://github.com/marrobi/RancherOnAzure/raw/master/"
     },
     "_artifactsLocationSasToken": {
       "type": "securestring",
-      "metadata": {
-        "description": "Auto-generated token to access _artifactsLocation"
-      }
+      "defaultValue": "?"
     }
 
   },
@@ -156,7 +152,49 @@
         ],
         "loadBalancingRules": [
           {
-            "name": "RancherServer",
+            "name": "port80",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[variables('frontEndIPConfigID')]"
+              },
+              "frontendPort": 80,
+              "backendPort": 80,
+              "enableFloatingIP": false,
+              "idleTimeoutInMinutes": 4,
+              "protocol": "Tcp",
+              "loadDistribution": "SourceIP",
+              "backendAddressPool": {
+                "id": "[variables('backEndIPConfigID')]"
+
+              },
+              "probe": {
+                "id": "[concat(variables('lbID'), '/probes/','port80Probe')]"
+              }
+            }
+          },
+          {
+            "name": "port443",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[variables('frontEndIPConfigID')]"
+              },
+              "frontendPort": 443,
+              "backendPort": 443,
+              "enableFloatingIP": false,
+              "idleTimeoutInMinutes": 4,
+              "protocol": "Tcp",
+              "loadDistribution": "SourceIP",
+              "backendAddressPool": {
+                "id": "[variables('backEndIPConfigID')]"
+
+              },
+              "probe": {
+                "id": "[concat(variables('lbID'), '/probes/','port443Probe')]"
+              }
+            }
+          },
+          {
+            "name": "port8080",
             "properties": {
               "frontendIPConfiguration": {
                 "id": "[variables('frontEndIPConfigID')]"
@@ -172,14 +210,32 @@
 
               },
               "probe": {
-                "id": "[concat(variables('lbID'), '/probes/','RancherServerProbe')]"
+                "id": "[concat(variables('lbID'), '/probes/','port8080Probe')]"
               }
             }
           }
         ],
         "probes": [
           {
-            "name": "RancherServerProbe",
+            "name": "port80Probe",
+            "properties": {
+              "protocol": "Tcp",
+              "port": 80,
+              "intervalInSeconds": 5,
+              "numberOfProbes": 2
+            }
+          },
+          {
+            "name": "port443Probe",
+            "properties": {
+              "protocol": "Tcp",
+              "port": 443,
+              "intervalInSeconds": 5,
+              "numberOfProbes": 2
+            }
+          },
+          {
+            "name": "port8080Probe",
             "properties": {
               "protocol": "Tcp",
               "port": 8080,
@@ -225,6 +281,7 @@
       },
 
       "properties": {
+        "overprovision": false,
         "upgradePolicy": {
           "mode": "Automatic"
         },
