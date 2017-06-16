@@ -1,3 +1,4 @@
+
 # Rancher On Azure
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmarrobi%2FRancherOnAzure%2Fmaster%2Fazuredeploy.json" target="_blank">
@@ -5,9 +6,11 @@
 </a>
 
 ### Important
-The template is set to deploy using the Azure MySQL service Standard SKU. The MySQL service is currently in public preview and this SKU is currently only available in the “East Asia” region. The SKU can be changed to a Basic SKU but deployment time takes much longer - 60 minutes. This will likely change before the service becomes generally avaialble.
+These ARM tempaltes are not supported under any Microsoft support programme or service, and are made available AS IS without warranty of any kind.
 
-SECURITY: Access control is not confiugred on initial deployment,when you connect it is recomended you configure access control credentials for Rancher. SSL is not configured for the connection to the Rancher management interface or between Rancher Server and the MySQL service.
+<b>Region Restriction:</b> The template is set to deploy using the Azure MySQL service Standard SKU. The MySQL service is currently in public preview and this SKU is currently only available in the “East Asia” region. The SKU can be changed to a Basic SKU but deployment time takes much longer - 60 minutes. This will likely change before the service becomes generally avaialble.
+
+<b>Security</b>: Access control is not confiugred on initial deployment,when you connect it is recomended you configure access control credentials for Rancher. SSL is not configured for the connection to the Rancher management interface or between Rancher Server and the MySQL service.
 
 ## Overview
 
