@@ -3,13 +3,13 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "serverDnsPrefix": {
-      "value": "rancherserverall6"
+      "value": "rancherserverall2"
     },
     "serverInstanceCount": {
       "value": 2
     },
     "hostDnsPrefix": {
-      "value": "rancherhostsall6"
+      "value": "rancherhostsall2"
     },
     "hostInstanceCount": {
       "value": 2

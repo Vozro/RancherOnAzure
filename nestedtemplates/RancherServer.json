@@ -291,7 +291,9 @@
                   "autoUpgradeMinorVersion": true,
                   "settings": {
                     "fileUris": [
-                      "[concat(parameters('_artifactsLocation'), '/', variables('ScriptScriptFolder'), '/', variables('ScriptScriptFileName'), parameters('_artifactsLocationSasToken'))]"
+                      "[concat(parameters('_artifactsLocation'), '/', variables('ScriptScriptFolder'), '/', variables('ScriptScriptFileName'), parameters('_artifactsLocationSasToken'))]",
+                      "[concat(parameters('_artifactsLocation'), '/mysql_ssl/ca.pem', parameters('_artifactsLocationSasToken'))]"
+
                     ],
                     "commandToExecute": "[concat('sh ', variables('ScriptScriptFileName'),' ',reference(resourceId('Microsoft.Resources/deployments','MySQL')).outputs.mySqlFQDN.value,' ',concat(parameters('adminUsername'),'@',variables('mySQLServerName')),' ',variables('singleQuote'),parameters('adminPassword'),variables('singleQuote'),' ',parameters('registryName'),' ',parameters('registryPassword'))]"
                   }
