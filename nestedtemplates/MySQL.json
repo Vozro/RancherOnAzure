@@ -104,7 +104,7 @@
         "version": "[parameters('mysqlVersion')]",
         "administratorLogin": "[parameters('administratorLogin')]",
         "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
-       "sslEnforcement":"Disabled"
+       "sslEnforcement":"Enabled"
       },
       "sku": {
         "name": "[parameters('databaseSkuName')]",

@@ -1,23 +1,35 @@
 #!/bin/bash -x
 
 
-export CATTLE_DB_CATTLE_GO_PARAMS='allowNativePasswords=true' 
+export CATTLE_DB_CATTLE_GO_PARAMS='allowNativePasswords=true&tls=true' # &tls=skip-verify' 
 export CATTLE_DB_CATTLE_MYSQL_HOST=${1}
 export CATTLE_DB_CATTLE_USERNAME=${2}
 export CATTLE_DB_CATTLE_PASSWORD=${3}
 export CATTLE_CLUSTER_ADVERTISE_ADDRESS=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance/network/interface/0/ipv4/ipaddress/0/ipaddress?api-version=2017-03-01&format=text")
 export CATTLE_DB_CATTLE_MYSQL_NAME='cattle'
 
+export CATTLE_DB_CATTLE_MYSQL_URL="jdbc:mysql://${CATTLE_DB_CATTLE_MYSQL_HOST}:3306/${CATTLE_DB_CATTLE_MYSQL_NAME}?useUnicode=true&characterEncoding=UTF-8&characterSetResults=UTF-8&prepStmtCacheSize=517&cachePrepStmts=true&prepStmtCacheSqlLimit=4096&socketTimeout=60000&connectTimeout=60000&sslServerCert=/var/lib/rancher/etc/ssl/ca.pem&useSSL=true"
+export CATTLE_DB_LIQUIBASE_MYSQL_URL=${CATTLE_DB_CATTLE_MYSQL_URL} 
+
+
 REGISTRY_USERNAME=${4}
 REGISTRY_ADDRESS="${4}.azurecr.io"
 REGISTRY_PASSWORD=${5}
 ENV_NAME='Default'
 
-docker run -d --restart=unless-stopped -p 8080:8080 -p 9345:9345 \
+
+# copy SSL
+mkdir -p /var/lib/rancher/etc/ssl/
+cp ca.pem /var/lib/rancher/etc/ssl/ca.pem
+
+
+# start server
+echo `docker run -d --restart=unless-stopped -p 8080:8080 -p 9345:9345 \
 	-e CATTLE_DB_CATTLE_MYSQL_HOST -e CATTLE_DB_CATTLE_USERNAME \
 	-e CATTLE_DB_CATTLE_PASSWORD -e CATTLE_DB_CATTLE_MYSQL_NAME  \
-    -e CATTLE_DB_CATTLE_GO_PARAMS \
-	rancher/server --advertise-address ${CATTLE_CLUSTER_ADVERTISE_ADDRESS}
+    -e CATTLE_DB_CATTLE_GO_PARAMS -e CATTLE_DB_CATTLE_MYSQL_URL  -e CATTLE_DB_LIQUIBASE_MYSQL_URL \
+	-v /var/lib/rancher/etc/ssl/ca.pem:/var/lib/rancher/etc/ssl/ca.pem \
+	rancher/server --advertise-address ${CATTLE_CLUSTER_ADVERTISE_ADDRESS}`
 
 
   # wait until rancher server is ready

@@ -35,6 +35,8 @@
     <Content Include="nestedtemplates\RancherHosts.json" />
     <Content Include="nestedtemplates\RancherServer.json" />
     <Content Include="nestedtemplates\ACR.json" />
+    <None Include="mysql_ssl\BaltimoreCyberTrustRoot.cer" />
+    <Content Include="mysql_ssl\ca.pem" />
     <None Include="nestedtemplates\RancherLoadBalancerRule.json" />
     <None Include="README.md" />
     <Content Include="scripts\configure_host.sh" />

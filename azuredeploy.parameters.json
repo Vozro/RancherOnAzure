@@ -3,13 +3,17 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "serverDnsPrefix": {
+
       "value": "serverdnsunique"
+
     },
     "serverInstanceCount": {
       "value": 2
     },
     "hostDnsPrefix": {
+
       "value": "hostdnsunique"
+
     },
     "hostInstanceCount": {
       "value": 2
