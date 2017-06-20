@@ -3,13 +3,17 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "serverDnsPrefix": {
-      "value": "rancherserverall2"
+
+      "value": "serverdnsunique"
+
     },
     "serverInstanceCount": {
       "value": 2
     },
     "hostDnsPrefix": {
-      "value": "rancherhostsall2"
+
+      "value": "hostdnsunique"
+
     },
     "hostInstanceCount": {
       "value": 2
@@ -18,7 +22,7 @@
       "value": "adminrancher"
     },
     "vmAdminPassword": {
-      "value": "Pa$$word1rancher"
+      "value": ""
     }
   }
 }
