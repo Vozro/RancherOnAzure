@@ -35,5 +35,4 @@ Traffic is configured to pass through to the Rancher Hosts on ports 80,443,8080.
 ## Pending work
 1.  Add Application Gateway to facilitate SSL offload to the Rancher server
 2.	Automatic removal of servers and hosts when scale down
-3.	SSL on MySQL service – Rancher need to work to resolve a configuration issue.
 
