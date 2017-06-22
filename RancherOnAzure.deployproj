@@ -31,6 +31,7 @@
       <Visible>False</Visible>
     </None>
     <Content Include="Deploy-AzureResourceGroup.ps1" />
+    <Content Include="nestedtemplates\ACR.parameters.json" />
     <Content Include="nestedtemplates\MySQL.json" />
     <Content Include="nestedtemplates\RancherHosts.json" />
     <Content Include="nestedtemplates\RancherServer.json" />

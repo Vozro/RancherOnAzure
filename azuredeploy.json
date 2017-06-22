@@ -105,8 +105,11 @@
             "value": "[parameters('serverDnsPrefix')]"
 
           },
-          "registryName": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments','ACR')).outputs.registryName.value]"
+          "registryServer": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments','ACR')).outputs.registryServer.value]"
+          },
+          "registryUsername": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments','ACR')).outputs.registryUsername.value]"
           },
           "registryPassword": {
             "value": "[reference(resourceId('Microsoft.Resources/deployments','ACR')).outputs.registryPassword.value]"

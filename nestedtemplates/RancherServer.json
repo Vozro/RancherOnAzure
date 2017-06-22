@@ -37,11 +37,17 @@
         "description": "Administrator password on all VMs"
       }
     },
-    "registryName": {
+    "registryServer": {
       "type": "string",
       "minLength": 1,
       "metadata": {
-        "description": "Regsitry Name"
+        "description": "Regsitry Server"
+      }
+    },
+    "registryUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "ACR username"
       }
     },
     "registryPassword": {
@@ -50,7 +56,7 @@
         "description": "ACR Password"
       }
     },
-      "_artifactsLocation": {
+    "_artifactsLocation": {
       "type": "string",
       "defaultValue": "https://github.com/marrobi/RancherOnAzure/raw/master/"
     },
@@ -295,7 +301,7 @@
                       "[concat(parameters('_artifactsLocation'), '/mysql_ssl/ca.pem', parameters('_artifactsLocationSasToken'))]"
 
                     ],
-                    "commandToExecute": "[concat('sh ', variables('ScriptScriptFileName'),' ',reference(resourceId('Microsoft.Resources/deployments','MySQL')).outputs.mySqlFQDN.value,' ',concat(parameters('adminUsername'),'@',variables('mySQLServerName')),' ',variables('singleQuote'),parameters('adminPassword'),variables('singleQuote'),' ',parameters('registryName'),' ',parameters('registryPassword'))]"
+                    "commandToExecute": "[concat('sh ', variables('ScriptScriptFileName'),' ',reference(resourceId('Microsoft.Resources/deployments','MySQL')).outputs.mySqlFQDN.value,' ',concat(parameters('adminUsername'),'@',variables('mySQLServerName')),' ',variables('singleQuote'),parameters('adminPassword'),variables('singleQuote'),' ',parameters('registryServer'),' ',parameters('registryUsername'),' ',parameters('registryPassword'))]"
                   }
                 }
               }
