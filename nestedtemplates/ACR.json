@@ -81,17 +81,17 @@
     }
   ],
   "outputs": {
-    "acrLoginServer": {
+    "registryServer": {
       "value": "[reference(resourceId('Microsoft.ContainerRegistry/registries',parameters('acrName'))).loginServer]",
       "type": "string"
     },
-    "registryName": {
+    "registryUsername": {
       "value": "[parameters('acrName')]",
       "type": "string"
     },
     "registryPassword": {
 
-      "value": "[listCredentials(resourceId('Microsoft.ContainerRegistry/registries',parameters('acrName')), '2017-03-01').passwords[0].value]",
+      "value": "[listCredentials(resourceId('Microsoft.ContainerRegistry/registries',parameters('acrName')),'2017-03-01').passwords[0].value]",
       "type": "string"
     }
   }
