@@ -9,7 +9,7 @@ These ARM templates are not supported under any Microsoft support programme or s
 
 <b>Region Restriction:</b> The template is set to deploy using the Azure MySQL service Standard SKU. The MySQL service is currently in public preview and this SKU is currently only available in the “East Asia” region. The SKU can be changed to a Basic SKU but deployment time takes much longer - 60 minutes. This will likely change before the service becomes generally available.
 
-<b>Security</b>: Access control is not configured on initial deployment, when you connect it is recommended you configure access control credentials for Rancher. SSL is not configured for the connection to the Rancher management interface or between Rancher Server and the MySQL service.
+<b>Security</b>: Access control is not configured on initial deployment, when you connect it is recommended you configure access control credentials for Rancher. SSL is not configured for the connection to the Rancher management interface.
 
 ## Overview
 
@@ -35,5 +35,4 @@ Traffic is configured to pass through to the Rancher Hosts on ports 80,443,8080.
 ## Pending work
 1.  Add Application Gateway to facilitate SSL offload to the Rancher server
 2.	Automatic removal of servers and hosts when scale down
-3.	SSL on MySQL service – Rancher need to work to resolve a configuration issue.
 
